@@ -1,0 +1,46 @@
+{
+  "name": "Pixim-box2d",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "rollup": "rollup -c rollup.config.js",
+    "docs": "typedoc --tsconfig tsconfig.pixim.json && typedoc --tsconfig tsconfig.pixi.json",
+    "watch": "npm run rollup -- -w",
+    "build": "ENV PROD=1 npm run rollup && npm run docs && echo done."
+  },
+  "keywords": [
+    "pixi.js",
+    "pixi"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tawaship/Pixim-createjs-player.git"
+  },
+  "author": "tawashi@",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tawaship/Pixim-createjs-player/issues"
+  },
+  "homepage": "https://tawaship.github.io/Pixim-createjs-player/",
+  "devDependencies": {
+    "@rollup/plugin-buble": "^0.21.3",
+    "@rollup/plugin-commonjs": "^15.1.0",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "@rollup/plugin-typescript": "^5.0.2",
+    "del": "^5.1.0",
+    "rollup": "^1.32.1",
+    "rollup-plugin-terser": "^7.0.0",
+    "tslib": "^1.11.0",
+    "typedoc": "^0.18.0",
+    "typescript": "^3.8.2"
+  },
+  "dependencies": {
+    "@tawaship/pixim.js": "^1.7.4",
+    "box2dweb": "^2.1.0-b",
+    "pixi.js": "^5.3.2"
+  }
+}

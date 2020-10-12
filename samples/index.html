@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no, minimal-ui">
+		<script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+		<script src="../lib/pixi.5.3.2.min.js"></script>
+		<script src="../lib/Pixim.min.js"></script>
+		<script src="../lib/box2d.min.js"></script>
+		<script src="../dist/Pixim-box2d.js"></script>
+	</head>
+	<body>
+		<script>
+			const app = new Pixim.Application({
+				width: 450,
+				height: 800
+			}, {
+				autoAdjust: true
+			});
+			
+			const Game = Pixim.Content.create();
+			
+			Game.setConfig({
+				width: 450,
+				height: 800
+			});
+			
+			class Root extends Pixim.Container {
+				constructor($) {
+					super();
+					
+					this.addChild(new PIXI.Graphics()).beginFill(0x00FF00).drawRect(0, 0, $.width, $.height / 2)
+					this.interactive = true;
+					
+					const world = this.addChild(new Pixim.box2d.World());
+					world.speed = 2;
+					$.vars.addDebugView(world);
+					
+					const g = new PIXI.Graphics().beginFill(0xFF0000).drawCircle(0, 0, 20)
+					const a = world.addBox2d(new Pixim.box2d.Circle(20, false, g, {
+						density: 0.1,
+						restitution: 0.1
+					}));
+					a.x = 100
+					
+					
+					
+					this.on("pointerdown", e => {
+					
+					const r = Math.random() > 0.5;
+					const w = 100
+					const h = 150
+					
+					const g2 = new PIXI.Graphics().beginFill(0xFF0000).drawRect(0, 0, w, h)
+					const a2 = world.addBox2d(new Pixim.box2d.Rectangle(w, h, false, g2, {
+						density: 0.1,
+						restitution: 0.1
+					}));
+					
+					if (!r) {
+						a2.x = e.data.global.x - a2.width / 2;
+						a2.y = e.data.global.y - a2.height / 2;
+					} else {
+						a2.rotation = 90 * Math.PI / 180;
+						a2.x = e.data.global.x + a2.height / 2;
+						a2.y = e.data.global.y - a2.width / 2;
+					}
+					
+						
+					
+					//r && (a2.rotation = 90 * Math.PI / 180);
+					//a2.x = e.data.global.x;
+					//a2.y = e.data.global.y;
+					})
+					
+					
+					
+					
+					const baseHeight = 100;
+					const _base = new PIXI.Graphics().beginFill(0xFF0000).drawRect(0, 0, $.width, baseHeight);
+					const base = world.addBox2d(new Pixim.box2d.Rectangle(_base.width, _base.height, true, _base));
+					base.y = $.height - baseHeight;
+					
+					return
+					a.addChild(new PIXI.Graphics())
+						.beginFill(0xFF0000)
+						.drawRect(0, 0, 100, 100);
+				}
+			}
+			
+			Game.defineLibraries({
+				root: Root
+			});
+			
+			const game = new Game();
+			
+			game.addVars({
+				addDebugView(world) {
+					world.addDebugView(app);
+				}
+			});
+			
+			app
+				.fullScreen()
+				.attachAsync(game)
+				.then(function() {
+					app.play();
+				});
+		</script>
+	</div>
+	</body>
+</html>
