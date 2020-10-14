@@ -32,18 +32,16 @@
 					this.addChild(new PIXI.Graphics()).beginFill(0x00FF00).drawRect(0, 0, $.width, $.height / 2)
 					this.interactive = true;
 					
+					
 					const world = this.addChild(new Pixim.box2d.World());
 					world.speed = 2;
-					$.vars.addDebugView(world);
 					
 					const g = new PIXI.Graphics().beginFill(0xFF0000).drawCircle(0, 0, 20)
 					const a = world.addBox2d(new Pixim.box2d.Circle(20, false, g, {
 						density: 0.1,
 						restitution: 0.1
 					}));
-					a.x = 100
-					
-					
+					a.x = 100;
 					
 					this.on("pointerdown", e => {
 					
@@ -100,13 +98,15 @@
 				}
 			});
 			
+			Pixim.box2d.setConfig({
+				useDebugDraw: true
+			});
+			
 			app
 				.fullScreen()
 				.attachAsync(game)
 				.then(function() {
-				setTimeout(()=>{
 					app.play();
-					},1000)
 				});
 		</script>
 	</div>

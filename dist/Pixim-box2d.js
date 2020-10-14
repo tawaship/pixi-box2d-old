@@ -3,13 +3,20 @@
  * 
  * @require pixi.js v5.3.2
  * @require @tawaship/pixim.js v1.7.4
+ * @require Box2d.js
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
-this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
+this.Pixim = this.Pixim || {}, function(exports, _PIXI, _Pixim, box2dweb) {
     "use strict";
-    var Pixim, Vec2 = box2dweb.Common.Math.b2Vec2, DebugDraw = box2dweb.Dynamics.b2DebugDraw, World = box2dweb.Dynamics.b2World, ContactListener = (box2dweb.Dynamics.Contacts.box2dContact, 
+    var PIXI, Vec2 = box2dweb.Common.Math.b2Vec2, DebugDraw = box2dweb.Dynamics.b2DebugDraw, World = box2dweb.Dynamics.b2World, ContactListener = (box2dweb.Dynamics.Contacts.box2dContact, 
     box2dweb.Dynamics.b2ContactListener), BodyDef = box2dweb.Dynamics.b2BodyDef, FixtureDef = box2dweb.Dynamics.b2FixtureDef, Body = box2dweb.Dynamics.b2Body, CircleShape = box2dweb.Collision.Shapes.b2CircleShape, PolygonShape = box2dweb.Collision.Shapes.b2PolygonShape;
+    !function(PIXI) {
+        !function(box2d) {
+            box2d.Box2dToPixi = 30, box2d.PixiToBox2d = 1 / box2d.Box2dToPixi;
+        }(PIXI.box2d || (PIXI.box2d = {}));
+    }(PIXI || (PIXI = {}));
+    var Pixim, Box2dToPixi = PIXI.box2d.Box2dToPixi, PixiToBox2d = PIXI.box2d.PixiToBox2d, options = {};
     !function(Pixim) {
         !function(box2d) {
             function createBodyDef(isDynamic) {
@@ -74,7 +81,7 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                     var body = this._box2dData.body;
                     if (body) {
                         var p = body.GetPosition();
-                        p.x = x / 30, body.SetPosition(p);
+                        p.x = x / Box2dToPixi, body.SetPosition(p);
                     }
                 }, prototypeAccessors.y.get = function() {
                     return descriptors.positionY.get.call(this.position);
@@ -83,7 +90,7 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                     var body = this._box2dData.body;
                     if (body) {
                         var p = body.GetPosition();
-                        p.y = y / 30, body.SetPosition(p);
+                        p.y = y / Box2dToPixi, body.SetPosition(p);
                     }
                 }, prototypeAccessors.rotation.get = function() {
                     return descriptors.rotation.get.call(this);
@@ -115,15 +122,40 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                 var dataA = contact.GetFixtureA().GetUserData(), dataB = contact.GetFixtureB().GetUserData();
                 dataA && dataA.emit && dataA.emit("PostSolve", dataB), dataB && dataB.emit && dataB.emit("PostSolve", dataA);
             }
+            var _app = null;
+            _PIXI.Application.registerPlugin({
+                init: function() {
+                    this.ticker.add(World$1.update), _app = this;
+                },
+                destroy: function() {
+                    this.ticker.remove(World$1.update), _app = null;
+                }
+            });
             var World$1 = function(superclass) {
-                function World$1(options) {
-                    void 0 === options && (options = {}), superclass.call(this);
-                    var gravityX = "number" == typeof options.gravityX ? options.gravityX : 0, gravityY = "number" == typeof options.gravityY ? options.gravityY : 9.8, allowSleep = !!options.allowSleep, useHandler = options.useHandler || {}, beginContact = !!useHandler.beginContact, endContact = !!useHandler.endContact, preSolve = !!useHandler.preSolve, postSolve = !!useHandler.postSolve;
-                    this._box2dData = {
-                        world: new World(new Vec2(gravityX, gravityY), allowSleep),
+                function World$1(options$1) {
+                    var this$1 = this;
+                    void 0 === options$1 && (options$1 = {}), superclass.call(this);
+                    var gravityX = "number" == typeof options$1.gravityX ? options$1.gravityX : 0, gravityY = "number" == typeof options$1.gravityY ? options$1.gravityY : 9.8, allowSleep = !!options$1.allowSleep, useHandler = options$1.useHandler || {}, beginContact = !!useHandler.beginContact, endContact = !!useHandler.endContact, preSolve = !!useHandler.preSolve, postSolve = !!useHandler.postSolve, world = new World(new Vec2(gravityX, gravityY), allowSleep);
+                    options.useDebugDraw && function(app, world) {
+                        var canvas = document.body.appendChild(document.createElement("canvas"));
+                        canvas.width = app.view.width, canvas.height = app.view.height, canvas.style.width = app.view.style.width, 
+                        canvas.style.height = app.view.style.height, canvas.style.top = app.view.style.top, 
+                        canvas.style.left = app.view.style.left, canvas.style.position = "absolute", canvas.style.pointerEvents = "none", 
+                        canvas.style.zIndex = "100";
+                        var debugDraw = new DebugDraw;
+                        debugDraw.SetSprite(canvas.getContext("2d")), debugDraw.SetDrawScale(Box2dToPixi), 
+                        debugDraw.SetFillAlpha(.5), debugDraw.SetLineThickness(1), debugDraw.SetFlags(DebugDraw.e_shapeBit | DebugDraw.e_jointBit), 
+                        world.SetDebugDraw(debugDraw);
+                    }(_app, world), this.on("added", (function() {
+                        World$1._add(this$1._box2dData.id, this$1);
+                    })), this.on("removed", (function() {
+                        World$1._remove(this$1._box2dData.id);
+                    })), this._box2dData = {
+                        world: world,
                         listener: new ContactListener,
                         enabled: !0,
-                        speed: 1
+                        speed: 1,
+                        id: World$1._id++
                     };
                     var listener = this._box2dData.listener;
                     beginContact && (listener.BeginContact = beginContactHandler), endContact && (listener.EndContact = endContactHandler), 
@@ -140,34 +172,31 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                         configurable: !0
                     }
                 };
-                return prototypeAccessors.speed.get = function() {
+                return World$1.update = function(delta) {
+                    for (var i in World$1._targets) {
+                        World$1._targets[i].box2dEnabled && World$1._targets[i].update(delta);
+                    }
+                }, World$1._add = function(id, world) {
+                    this._targets[id] = world;
+                }, World$1._remove = function(id) {
+                    delete this._targets[id];
+                }, prototypeAccessors.speed.get = function() {
                     return this._box2dData.speed;
                 }, prototypeAccessors.speed.set = function(speed) {
                     this._box2dData.speed = speed;
                 }, prototypeAccessors.box2dEnabled.get = function() {
                     return this._box2dData.enabled;
                 }, prototypeAccessors.box2dEnabled.set = function(flag) {
-                    var this$1 = this;
-                    this._box2dData.enabled = flag, this.task.clear("box2dUpdate"), flag && this.task.on("box2dUpdate", (function(e) {
-                        var world = this$1._box2dData.world;
-                        world.Step(e.delta * this$1._box2dData.speed / 60, 10, 10), world.ClearForces(), 
-                        world.DrawDebugData();
-                        for (var d = this$1.children, i = 0; i < d.length; i++) {
-                            if (d[i] instanceof Box2dObject) {
-                                var r = d[i], position = r.body.GetPosition();
-                                r.x = 30 * position.x, r.y = 30 * position.y, r.rotation = r.body.GetAngle();
-                            }
+                    this._box2dData.enabled = flag;
+                }, World$1.prototype.update = function(delta) {
+                    var world = this._box2dData.world;
+                    world.Step(delta * this._box2dData.speed / 60, 10, 10), world.ClearForces(), world.DrawDebugData();
+                    for (var d = this.children, i = 0; i < d.length; i++) {
+                        if (d[i] instanceof Box2dObject) {
+                            var r = d[i], position = r.body.GetPosition();
+                            r.x = position.x * Box2dToPixi, r.y = position.y * Box2dToPixi, r.rotation = r.body.GetAngle();
                         }
-                    }));
-                }, World$1.prototype.addDebugView = function(app) {
-                    var canvas = document.body.appendChild(document.createElement("canvas"));
-                    canvas.width = app.view.width, canvas.height = app.view.height, canvas.style.width = app.view.style.width, 
-                    canvas.style.height = app.view.style.height, canvas.style.top = app.view.style.top, 
-                    canvas.style.left = app.view.style.left, canvas.style.position = "absolute", canvas.style.pointerEvents = "none";
-                    var debugDraw = new DebugDraw;
-                    return debugDraw.SetSprite(canvas.getContext("2d")), debugDraw.SetDrawScale(30), 
-                    debugDraw.SetFillAlpha(.5), debugDraw.SetLineThickness(1), debugDraw.SetFlags(DebugDraw.e_shapeBit | DebugDraw.e_jointBit), 
-                    this._box2dData.world.SetDebugDraw(debugDraw), canvas;
+                    }
                 }, World$1.prototype.addBox2d = function(child) {
                     this.addChild(child);
                     for (var body = this._box2dData.world.CreateBody(child.getBodyDef()), fixtureDefs = child.getFixtureDefs(), i = 0; i < fixtureDefs.length; i++) {
@@ -179,7 +208,7 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                     child;
                 }, Object.defineProperties(World$1.prototype, prototypeAccessors), World$1;
             }(_Pixim.Container);
-            box2d.World = World$1;
+            World$1._id = 0, World$1._targets = {}, box2d.World = World$1;
         }(Pixim.box2d || (Pixim.box2d = {}));
     }(Pixim$1 || (Pixim$1 = {}));
     var Pixim$2, World$1 = Pixim$1.box2d.World;
@@ -188,7 +217,7 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
             var Circle = function(Box2dObject) {
                 function Circle(radius, isStatic, pixi, options) {
                     void 0 === options && (options = {}), Box2dObject.call(this, isStatic, options), 
-                    this._box2dData.radius = radius, this.getFixtureDefs()[0].shape = new CircleShape(.03333333333333333 * radius), 
+                    this._box2dData.radius = radius, this.getFixtureDefs()[0].shape = new CircleShape(radius * PixiToBox2d), 
                     this.addChild(pixi);
                 }
                 Box2dObject && (Circle.__proto__ = Box2dObject), Circle.prototype = Object.create(Box2dObject && Box2dObject.prototype), 
@@ -211,8 +240,8 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
             var Rectangle = function(Box2dObject) {
                 function Rectangle(width, height, isStatic, pixi, options) {
                     void 0 === options && (options = {}), Box2dObject.call(this, isStatic, options), 
-                    this._box2dData.width = width, this._box2dData.height = height, width *= .03333333333333333, 
-                    height *= .03333333333333333;
+                    this._box2dData.width = width, this._box2dData.height = height, width *= PixiToBox2d, 
+                    height *= PixiToBox2d;
                     var fixtureDef = this.getFixtureDefs()[0];
                     fixtureDef.shape = new PolygonShape, fixtureDef.shape.SetAsArray([ new Vec2(0, 0), new Vec2(width, 0), new Vec2(width, height), new Vec2(0, height) ]), 
                     this.addChild(pixi);
@@ -223,8 +252,16 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
             box2d.Rectangle = Rectangle;
         }(Pixim.box2d || (Pixim.box2d = {}));
     }(Pixim$3 || (Pixim$3 = {}));
-    var Rectangle = Pixim$3.box2d.Rectangle;
+    var PIXI$1, Rectangle = Pixim$3.box2d.Rectangle;
+    !function(PIXI) {
+        !function(box2d) {
+            box2d.setConfig = function(options$1) {
+                void 0 === options$1 && (options$1 = {}), options.useDebugDraw = options$1.useDebugDraw;
+            };
+        }(PIXI.box2d || (PIXI.box2d = {}));
+    }(PIXI$1 || (PIXI$1 = {}));
+    var setConfig = PIXI$1.box2d.setConfig;
     exports.Box2dObject = Box2dObject, exports.Circle = Circle, exports.Rectangle = Rectangle, 
-    exports.World = World$1;
-}(this.Pixim.box2d = this.Pixim.box2d || {}, Pixim, Box2D, PIXI);
+    exports.World = World$1, exports.setConfig = setConfig;
+}(this.Pixim.box2d = this.Pixim.box2d || {}, PIXI, Pixim, Box2D);
 //# sourceMappingURL=Pixim-box2d.js.map
