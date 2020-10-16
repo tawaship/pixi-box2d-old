@@ -60,6 +60,9 @@ export default (async () => {
 			],
 			external: ['pixi.js', '@tawaship/pixim.js', 'box2dweb'],
 			plugins: [
+				require("rollup-plugin-replace")({
+					"process.env.HOGE": JSON.stringify("gmoge")
+				}),
 				nodeResolve(),
 				commonjs(),
 				typescript({tsconfig: 'tsconfig.pixim.json'}),

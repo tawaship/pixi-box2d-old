@@ -4,11 +4,6 @@ import { World } from './World';
 import { Box2dObject, IBox2dObjectData, IBox2dObjectOption } from './Box2dObject';
 import * as Conf from './Conf';
 
-/**
- * @ignore
- */
-
-
 namespace Pixim {
 	export namespace box2d {
 		export interface IRectangleData extends IBox2dObjectData {

@@ -1,10 +1,14 @@
-namespace PIXI {
+import { Ticker } from 'pixi.js';
+
+namespace Pixim {
 	export namespace box2d {
-		export const Box2dToPixi = 30;
-		export const PixiToBox2d = 1 / Box2dToPixi;
-		
-		export interface IPrepareOption {
-			useDebugDraw?: boolean
+		export interface IInitOption {
+			/**
+			 * Ticker that synchronizes the processing of box2dweb.
+			 * 
+			 * @see http://pixijs.download/v5.3.2/docs/PIXI.Ticker_.html
+			 */
+			ticker?: Ticker
 		};
 	}
 }
@@ -12,19 +16,21 @@ namespace PIXI {
 /**
  * @ignore
  */
-export import Box2dToPixi = PIXI.box2d.Box2dToPixi;
+export const Box2dToPixi = 30;
 
 /**
  * @ignore
  */
-export import PixiToBox2d = PIXI.box2d.PixiToBox2d;
+export const PixiToBox2d = 1 / Box2dToPixi;
 
 /**
  * @ignore
  */
-export import IPrepareOption = PIXI.box2d.IPrepareOption;
+export import IInitOption = Pixim.box2d.IInitOption;
 
 /**
  * @ignore
  */
-export const options: PIXI.box2d.IPrepareOption = {};
+export const initOption: Pixim.box2d.IInitOption = {
+	ticker: null
+};
