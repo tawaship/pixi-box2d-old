@@ -14,7 +14,7 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
     !function(Pixim) {
         Pixim.box2d || (Pixim.box2d = {});
     }(Pixim || (Pixim = {}));
-    var Pixim$1, PixiToBox2d = 1 / 30, initOption = {
+    var Pixim$1, PixiToBox2d = 1 / 30, initializeOption = {
         ticker: null
     };
     !function(Pixim) {
@@ -49,7 +49,8 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                         deletes: {},
                         ticker: options.ticker
                     }, this.on("added", (function() {
-                        this$1._box2dData.ticker = this$1._box2dData.ticker || initOption.ticker, this$1._box2dData.ticker.add(this$1._handleTick, this$1);
+                        this$1._box2dData.ticker = this$1._box2dData.ticker || initializeOption.ticker, 
+                        this$1._box2dData.ticker.add(this$1._handleTick, this$1);
                     })), this.on("removed", (function() {
                         this$1._box2dData.ticker.remove(this$1._handleTick, this$1);
                     }));
@@ -273,7 +274,7 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
             box2d.init = function(options) {
                 return void 0 === options && (options = {}), _isInit ? (console.warn("[Pixim-box2d] Already initialized."), 
                 Pixim.box2d) : (options.ticker || console.warn("[Pixim-box2d] It may not work because no default ticker is specified."), 
-                initOption.ticker = options.ticker, _isInit = !0, Pixim.box2d);
+                initializeOption.ticker = options.ticker, _isInit = !0, Pixim.box2d);
             }, box2d.addDebugDraw = function(world, pixiCanvas) {
                 var canvas = document.body.appendChild(document.createElement("canvas"));
                 canvas.width = pixiCanvas.width, canvas.height = pixiCanvas.height, canvas.style.width = pixiCanvas.style.width, 

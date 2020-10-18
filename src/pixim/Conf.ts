@@ -2,7 +2,7 @@ import { Ticker } from 'pixi.js';
 
 namespace Pixim {
 	export namespace box2d {
-		export interface IInitOption {
+		export interface IInitializeOption {
 			/**
 			 * Ticker that synchronizes the processing of box2dweb.
 			 * 
@@ -26,11 +26,11 @@ export const PixiToBox2d = 1 / Box2dToPixi;
 /**
  * @ignore
  */
-export import IInitOption = Pixim.box2d.IInitOption;
+export import IInitializeOption = Pixim.box2d.IInitializeOption;
 
 /**
  * @ignore
  */
-export const initOption: Pixim.box2d.IInitOption = {
+export const initializeOption: Pixim.box2d.IInitializeOption = {
 	ticker: null
 };

@@ -16,7 +16,7 @@ namespace Pixim {
 			export const EndContact = 'EndContact';
 			
 			/**
-			 * Immediately before performing contact processing between objects.
+			 * Immediately before performing contact processing between objects.<br />
 			 * It will not fire if at least one is "isSensor = true".
 			 * 
 			 * @event
@@ -24,7 +24,7 @@ namespace Pixim {
 			export const PreSolve = 'PreSolve';
 			
 			/**
-			 * Immediately after performing contact processing between objects.
+			 * Immediately after performing contact processing between objects.<br />
 			 * It will not fire if at least one is "isSensor = true".
 			 * 
 			 * @event

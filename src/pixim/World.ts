@@ -2,11 +2,11 @@ import { Application, Ticker } from 'pixi.js';
 import * as _Pixim from '@tawaship/pixim.js';
 import { Vec2, World as _World, Contact, ContactListener } from './Box2dAlias';
 import { Box2dObject } from './Box2dObject';
-import { initOption, Box2dToPixi, PixiToBox2d } from './Conf';
+import { initializeOption, Box2dToPixi, PixiToBox2d } from './Conf';
 
 namespace Pixim {
 	export namespace box2d {
-		export interface IBox2dWorldData {
+		export interface IWorldData {
 			world: _World,
 			listener: ContactListener,
 			enabled: boolean,
@@ -16,7 +16,7 @@ namespace Pixim {
 			ticker?: Ticker
 		};
 		
-		export interface IBox2dWorldOption {
+		export interface IWorldOption {
 			gravityX?: number,
 			gravityY?: number,
 			allowSleep?: boolean,
@@ -75,9 +75,9 @@ namespace Pixim {
 		 * @see https://tawaship.github.io/Pixim.js/classes/pixim.container.html
 		 */
 		export class World extends _Pixim.Container {
-			private _box2dData: IBox2dWorldData;
+			private _box2dData: IWorldData;
 			
-			constructor(options: IBox2dWorldOption = {}) {
+			constructor(options: IWorldOption = {}) {
 				super();
 				
 				const gravityX = typeof(options.gravityX) === 'number' ? options.gravityX : 0;
@@ -97,7 +97,7 @@ namespace Pixim {
 				};
 				
 				this.on('added', () => {
-					this._box2dData.ticker = this._box2dData.ticker || initOption.ticker;
+					this._box2dData.ticker = this._box2dData.ticker || initializeOption.ticker;
 					this._box2dData.ticker.add(this._handleTick, this);
 				});
 				

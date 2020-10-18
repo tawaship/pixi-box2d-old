@@ -1,4 +1,4 @@
-import { IInitOption, initOption } from './Conf';
+import { IInitializeOption, initializeOption } from './Conf';
 import { Application } from 'pixi.js';
 import { World } from './World';
 import { DebugDraw } from './Box2dAlias';
@@ -14,7 +14,7 @@ namespace Pixim {
 		/**
 		 * @return Returns itself for the method chaining.
 		 */
-		export function init(options: IInitOption = {}) {
+		export function init(options: IInitializeOption = {}) {
 			if (_isInit) {
 				console.warn('[Pixim-box2d] Already initialized.');
 				return Pixim.box2d;
@@ -24,7 +24,7 @@ namespace Pixim {
 				console.warn('[Pixim-box2d] It may not work because no default ticker is specified.');
 			}
 			
-			initOption.ticker = options.ticker;
+			initializeOption.ticker = options.ticker;
 			
 			_isInit = true;
 			
@@ -65,7 +65,7 @@ namespace Pixim {
 /**
  * @ignore
  */
-export { IInitOption };
+export { IInitializeOption };
 
 /**
  * @ignore
