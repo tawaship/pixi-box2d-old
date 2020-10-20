@@ -1,6 +1,6 @@
 import { IInitializeOption, initializeOption } from './Conf';
 import { Application } from 'pixi.js';
-import { World } from './World';
+import { WorldContainer } from './WorldContainer';
 import { DebugDraw } from './Box2dAlias';
 import { Box2dToPixi } from './Conf';
 
@@ -36,7 +36,7 @@ namespace Pixim {
 		 * @param canvas The canvas element on which the content is drawn.
 		 * @return Canvas element for debug display.
 		 */
-		export function addDebugDraw(world: World, pixiCanvas: HTMLCanvasElement): HTMLCanvasElement {
+		export function addDebugDraw(world: WorldContainer, pixiCanvas: HTMLCanvasElement): HTMLCanvasElement {
 			const canvas = document.body.appendChild(document.createElement('canvas'));
 			canvas.width = pixiCanvas.width;
 			canvas.height = pixiCanvas.height;

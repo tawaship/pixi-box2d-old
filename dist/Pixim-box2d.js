@@ -7,14 +7,24 @@
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
-this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
+this.Pixim = this.Pixim || {}, function(exports, box2dweb, pixim_js, pixi_js) {
     "use strict";
     var Pixim, Vec2 = box2dweb.Common.Math.b2Vec2, DebugDraw = box2dweb.Dynamics.b2DebugDraw, World = box2dweb.Dynamics.b2World, ContactListener = (box2dweb.Dynamics.Contacts.box2dContact, 
     box2dweb.Dynamics.b2ContactListener), BodyDef = box2dweb.Dynamics.b2BodyDef, FixtureDef = box2dweb.Dynamics.b2FixtureDef, Body = box2dweb.Dynamics.b2Body, CircleShape = box2dweb.Collision.Shapes.b2CircleShape, PolygonShape = box2dweb.Collision.Shapes.b2PolygonShape;
+    box2dweb.Collision.Shapes.b2EdgeShape;
     !function(Pixim) {
-        Pixim.box2d || (Pixim.box2d = {});
+        !function(box2d) {
+            var ContainerBase = function(PiximContainer) {
+                function ContainerBase() {
+                    PiximContainer.apply(this, arguments);
+                }
+                return PiximContainer && (ContainerBase.__proto__ = PiximContainer), ContainerBase.prototype = Object.create(PiximContainer && PiximContainer.prototype), 
+                ContainerBase.prototype.constructor = ContainerBase, ContainerBase;
+            }(pixim_js.Container);
+            box2d.ContainerBase = ContainerBase;
+        }(Pixim.box2d || (Pixim.box2d = {}));
     }(Pixim || (Pixim = {}));
-    var Pixim$1, PixiToBox2d = 1 / 30, initializeOption = {
+    var Pixim$1, ContainerBase = Pixim.box2d.ContainerBase, PixiToBox2d = 1 / 30, initializeOption = {
         ticker: null
     };
     !function(Pixim) {
@@ -35,10 +45,10 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                 var dataA = contact.GetFixtureA().GetUserData(), dataB = contact.GetFixtureB().GetUserData();
                 dataA && dataA.emit && dataA.emit("PostSolve", dataB), dataB && dataB.emit && dataB.emit("PostSolve", dataA);
             }
-            var World$1 = function(superclass) {
-                function World$1(options) {
+            var WorldContainer = function(ContainerBase) {
+                function WorldContainer(options) {
                     var this$1 = this;
-                    void 0 === options && (options = {}), superclass.call(this);
+                    void 0 === options && (options = {}), ContainerBase.call(this);
                     var gravityX = "number" == typeof options.gravityX ? options.gravityX : 0, gravityY = "number" == typeof options.gravityY ? options.gravityY : 9.8, allowSleep = !!options.allowSleep, world = new World(new Vec2(gravityX, gravityY), allowSleep);
                     this._box2dData = {
                         world: world,
@@ -59,8 +69,8 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                     options.listenPreSolve && (listener.PreSolve = preSolveHandler), options.listenPostSolve && (listener.PostSolve = postSolveHandler), 
                     world.SetContactListener(listener), this.box2dEnabled = !0;
                 }
-                superclass && (World$1.__proto__ = superclass), World$1.prototype = Object.create(superclass && superclass.prototype), 
-                World$1.prototype.constructor = World$1;
+                ContainerBase && (WorldContainer.__proto__ = ContainerBase), WorldContainer.prototype = Object.create(ContainerBase && ContainerBase.prototype), 
+                WorldContainer.prototype.constructor = WorldContainer;
                 var prototypeAccessors = {
                     speed: {
                         configurable: !0
@@ -72,7 +82,7 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                         configurable: !0
                     }
                 };
-                return World$1.prototype._handleTick = function(delta) {
+                return WorldContainer.prototype._handleTick = function(delta) {
                     if (this._box2dData.enabled) {
                         var world = this._box2dData.world;
                         world.Step(delta * this._box2dData.speed / 30, 10, 10), world.ClearForces(), world.DrawDebugData();
@@ -96,7 +106,7 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                     this._box2dData.enabled = flag;
                 }, prototypeAccessors.world.get = function() {
                     return this._box2dData.world;
-                }, World$1.prototype.addBox2d = function(b2d) {
+                }, WorldContainer.prototype.addBox2d = function(b2d) {
                     if (!b2d.body) {
                         for (var body = this._box2dData.world.CreateBody(b2d.getBodyDef()), fixtureDefs = b2d.getFixtureDefs(), i = 0; i < fixtureDefs.length; i++) {
                             body.CreateFixture(fixtureDefs[i]);
@@ -108,14 +118,14 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                     }
                     return this.addChild(b2d), this._box2dData.targets[b2d.box2dID] = b2d, delete this._box2dData.deletes[b2d.box2dID], 
                     b2d;
-                }, World$1.prototype.removeBox2d = function(b2d) {
+                }, WorldContainer.prototype.removeBox2d = function(b2d) {
                     return this.removeChild(b2d), this._box2dData.deletes[b2d.box2dID] = b2d, b2d;
-                }, Object.defineProperties(World$1.prototype, prototypeAccessors), World$1;
-            }(_Pixim.Container);
-            box2d.World = World$1;
+                }, Object.defineProperties(WorldContainer.prototype, prototypeAccessors), WorldContainer;
+            }(ContainerBase);
+            box2d.WorldContainer = WorldContainer;
         }(Pixim.box2d || (Pixim.box2d = {}));
     }(Pixim$1 || (Pixim$1 = {}));
-    var Pixim$2, World$1 = Pixim$1.box2d.World;
+    var Pixim$2, WorldContainer = Pixim$1.box2d.WorldContainer;
     !function(Pixim) {
         !function(box2d) {
             function createBodyDef(isDynamic) {
@@ -135,21 +145,21 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                 fixtureDef.isSensor = !!options.isSensor, fixtureDef.userData = pixi, fixtureDef;
             }
             var descriptors = {
-                positionX: Object.getOwnPropertyDescriptor(_PIXI.ObservablePoint.prototype, "x"),
-                positionY: Object.getOwnPropertyDescriptor(_PIXI.ObservablePoint.prototype, "y"),
-                positionSet: _PIXI.ObservablePoint.prototype.set,
-                rotation: Object.getOwnPropertyDescriptor(_PIXI.DisplayObject.prototype, "rotation")
-            }, Box2dObject = function(superclass) {
-                function Box2dObject(isStatic, options) {
-                    void 0 === isStatic && (isStatic = !1), void 0 === options && (options = {}), superclass.call(this), 
-                    this._box2dData = {
+                positionX: Object.getOwnPropertyDescriptor(pixi_js.ObservablePoint.prototype, "x"),
+                positionY: Object.getOwnPropertyDescriptor(pixi_js.ObservablePoint.prototype, "y"),
+                positionSet: pixi_js.ObservablePoint.prototype.set,
+                rotation: Object.getOwnPropertyDescriptor(pixi_js.DisplayObject.prototype, "rotation")
+            }, Box2dObject = function(ContainerBase) {
+                function Box2dObject(options) {
+                    void 0 === options && (options = {}), ContainerBase.call(this), this._box2dData = {
                         id: Box2dObject._id++,
                         body: null,
-                        bodyDef: isStatic ? staticBodyDef : dynamicBodyDef,
-                        fixtureDefs: [ createFixtureDef(options, this) ]
+                        bodyDef: options.isStatic ? staticBodyDef : dynamicBodyDef,
+                        fixtureDefs: [ createFixtureDef(options, this) ],
+                        pixi: null
                     };
                 }
-                superclass && (Box2dObject.__proto__ = superclass), Box2dObject.prototype = Object.create(superclass && superclass.prototype), 
+                ContainerBase && (Box2dObject.__proto__ = ContainerBase), Box2dObject.prototype = Object.create(ContainerBase && ContainerBase.prototype), 
                 Box2dObject.prototype.constructor = Box2dObject;
                 var prototypeAccessors = {
                     box2dID: {
@@ -222,8 +232,12 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                         var data = list.GetFilterData();
                         data.maskBits = 0, list.SetFilterData(data), list = list.GetNext();
                     }
+                }, Box2dObject.prototype.toDynamic = function() {
+                    this._box2dData.body && this._box2dData.body.SetType(Body.b2_dynamicBody);
+                }, Box2dObject.prototype.toStatic = function() {
+                    this._box2dData.body && this._box2dData.body.SetType(Body.b2_staticBody);
                 }, Object.defineProperties(Box2dObject.prototype, prototypeAccessors), Box2dObject;
-            }(_PIXI.Container);
+            }(ContainerBase);
             Box2dObject._id = 0, box2d.Box2dObject = Box2dObject;
         }(Pixim.box2d || (Pixim.box2d = {}));
     }(Pixim$2 || (Pixim$2 = {}));
@@ -231,21 +245,17 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
     !function(Pixim) {
         !function(box2d) {
             var Circle = function(Box2dObject) {
-                function Circle(radius, isStatic, pixi, options) {
-                    void 0 === options && (options = {}), Box2dObject.call(this, isStatic, options), 
-                    this._box2dData.radius = radius, this.getFixtureDefs()[0].shape = new CircleShape(radius * PixiToBox2d), 
-                    this.addChild(pixi);
+                function Circle(radius, options) {
+                    void 0 === options && (options = {}), Box2dObject.call(this, options), this.getFixtureDefs()[0].shape = new CircleShape(radius * PixiToBox2d);
                 }
-                Box2dObject && (Circle.__proto__ = Box2dObject), Circle.prototype = Object.create(Box2dObject && Box2dObject.prototype), 
-                Circle.prototype.constructor = Circle;
-                var prototypeAccessors = {
-                    radius: {
-                        configurable: !0
-                    }
-                };
-                return prototypeAccessors.radius.get = function() {
-                    return this._box2dData.radius;
-                }, Object.defineProperties(Circle.prototype, prototypeAccessors), Circle;
+                return Box2dObject && (Circle.__proto__ = Box2dObject), Circle.prototype = Object.create(Box2dObject && Box2dObject.prototype), 
+                Circle.prototype.constructor = Circle, Circle.from = function(pixi, options) {
+                    void 0 === options && (options = {});
+                    var b2d = new Circle(Math.max(pixi.width / 2, pixi.height / 2), options), c = b2d.addChild(new PIXI.Container);
+                    c.addChild(pixi);
+                    var b = b2d.getLocalBounds();
+                    return c.x = -b.x - pixi.width / 2, c.y = -b.y - pixi.height / 2, b2d;
+                }, Circle;
             }(Box2dObject);
             box2d.Circle = Circle;
         }(Pixim.box2d || (Pixim.box2d = {}));
@@ -254,21 +264,61 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
     !function(Pixim) {
         !function(box2d) {
             var Rectangle = function(Box2dObject) {
-                function Rectangle(width, height, isStatic, pixi, options) {
-                    void 0 === options && (options = {}), Box2dObject.call(this, isStatic, options), 
-                    this._box2dData.width = width, this._box2dData.height = height, width *= PixiToBox2d, 
+                function Rectangle(width, height, options) {
+                    void 0 === options && (options = {}), Box2dObject.call(this, options), width *= PixiToBox2d, 
                     height *= PixiToBox2d;
                     var fixtureDef = this.getFixtureDefs()[0];
-                    fixtureDef.shape = new PolygonShape, fixtureDef.shape.SetAsArray([ new Vec2(0, 0), new Vec2(width, 0), new Vec2(width, height), new Vec2(0, height) ]), 
-                    this.addChild(pixi);
+                    fixtureDef.shape = new PolygonShape, fixtureDef.shape.SetAsArray([ new Vec2(0, 0), new Vec2(width, 0), new Vec2(width, height), new Vec2(0, height) ]);
                 }
                 return Box2dObject && (Rectangle.__proto__ = Box2dObject), Rectangle.prototype = Object.create(Box2dObject && Box2dObject.prototype), 
-                Rectangle.prototype.constructor = Rectangle, Rectangle;
+                Rectangle.prototype.constructor = Rectangle, Rectangle.from = function(pixi, options) {
+                    void 0 === options && (options = {});
+                    var b2d = new Rectangle(pixi.width, pixi.height, options), c = b2d.addChild(new PIXI.Container);
+                    c.addChild(pixi);
+                    var b = b2d.getLocalBounds();
+                    return c.x = -b.x, c.y = -b.y, b2d;
+                }, Rectangle;
             }(Box2dObject);
             box2d.Rectangle = Rectangle;
         }(Pixim.box2d || (Pixim.box2d = {}));
     }(Pixim$4 || (Pixim$4 = {}));
-    var Pixim$5, Rectangle = Pixim$4.box2d.Rectangle, _isInit = !1;
+    var Pixim$5, Rectangle = Pixim$4.box2d.Rectangle;
+    !function(Pixim) {
+        !function(box2d) {
+            var Polygon = function(Box2dObject) {
+                function Polygon(vertices, pixi, options) {
+                    void 0 === options && (options = {}), Box2dObject.call(this, options);
+                    var fixtureDef = this.getFixtureDefs()[0];
+                    fixtureDef.shape = new PolygonShape, fixtureDef.shape.SetAsArray(vertices);
+                }
+                return Box2dObject && (Polygon.__proto__ = Box2dObject), Polygon.prototype = Object.create(Box2dObject && Box2dObject.prototype), 
+                Polygon.prototype.constructor = Polygon, Polygon;
+            }(Box2dObject);
+            box2d.Polygon = Polygon;
+        }(Pixim.box2d || (Pixim.box2d = {}));
+    }(Pixim$5 || (Pixim$5 = {}));
+    var Pixim$6, Polygon = Pixim$5.box2d.Polygon;
+    !function(Pixim) {
+        !function(box2d) {
+            var Edge = function(Box2dObject) {
+                function Edge(to, options) {
+                    void 0 === options && (options = {}), Box2dObject.call(this, options);
+                    var fixtureDef = this.getFixtureDefs()[0];
+                    fixtureDef.shape = new PolygonShape, fixtureDef.shape.SetAsEdge({
+                        x: 0,
+                        y: 0
+                    }, {
+                        x: to.x * PixiToBox2d,
+                        y: to.y * PixiToBox2d
+                    });
+                }
+                return Box2dObject && (Edge.__proto__ = Box2dObject), Edge.prototype = Object.create(Box2dObject && Box2dObject.prototype), 
+                Edge.prototype.constructor = Edge, Edge;
+            }(Box2dObject);
+            box2d.Edge = Edge;
+        }(Pixim.box2d || (Pixim.box2d = {}));
+    }(Pixim$6 || (Pixim$6 = {}));
+    var Pixim$7, Edge = Pixim$6.box2d.Edge, _isInit = !1;
     !function(Pixim) {
         !function(box2d) {
             box2d.init = function(options) {
@@ -287,8 +337,8 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                 world.world.SetDebugDraw(debugDraw), canvas;
             };
         }(Pixim.box2d || (Pixim.box2d = {}));
-    }(Pixim$5 || (Pixim$5 = {}));
-    var Pixim$6, init = Pixim$5.box2d.init, addDebugDraw = Pixim$5.box2d.addDebugDraw;
+    }(Pixim$7 || (Pixim$7 = {}));
+    var Pixim$8, init = Pixim$7.box2d.init, addDebugDraw = Pixim$7.box2d.addDebugDraw;
     !function(Pixim) {
         !function(box2d) {
             !function(events) {
@@ -296,10 +346,10 @@ this.Pixim = this.Pixim || {}, function(exports, _Pixim, box2dweb, _PIXI) {
                 events.PostSolve = "PostSolve";
             }(box2d.events || (box2d.events = {}));
         }(Pixim.box2d || (Pixim.box2d = {}));
-    }(Pixim$6 || (Pixim$6 = {}));
-    var events = Pixim$6.box2d.events;
-    exports.Box2dObject = Box2dObject, exports.Circle = Circle, exports.Rectangle = Rectangle, 
-    exports.World = World$1, exports.addDebugDraw = addDebugDraw, exports.events = events, 
-    exports.init = init;
-}(this.Pixim.box2d = this.Pixim.box2d || {}, Pixim, Box2D, PIXI);
+    }(Pixim$8 || (Pixim$8 = {}));
+    var events = Pixim$8.box2d.events;
+    exports.Box2dObject = Box2dObject, exports.Circle = Circle, exports.Edge = Edge, 
+    exports.Polygon = Polygon, exports.Rectangle = Rectangle, exports.WorldContainer = WorldContainer, 
+    exports.addDebugDraw = addDebugDraw, exports.events = events, exports.init = init;
+}(this.Pixim.box2d = this.Pixim.box2d || {}, Box2D, Pixim, PIXI);
 //# sourceMappingURL=Pixim-box2d.js.map

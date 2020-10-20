@@ -1,13 +1,13 @@
 import { Application, Ticker } from 'pixi.js';
-import * as _Pixim from '@tawaship/pixim.js';
-import { Vec2, World as _World, Contact, ContactListener } from './Box2dAlias';
+import { Vec2, World, Contact, ContactListener } from './Box2dAlias';
 import { Box2dObject } from './Box2dObject';
+import { ContainerBase } from './ContainerBase';
 import { initializeOption, Box2dToPixi, PixiToBox2d } from './Conf';
 
 namespace Pixim {
 	export namespace box2d {
-		export interface IWorldData {
-			world: _World,
+		export interface IWorldContainerData {
+			world: World,
 			listener: ContactListener,
 			enabled: boolean,
 			speed: number,
@@ -16,7 +16,7 @@ namespace Pixim {
 			ticker?: Ticker
 		};
 		
-		export interface IWorldOption {
+		export interface IWorldContainerOption {
 			gravityX?: number,
 			gravityY?: number,
 			allowSleep?: boolean,
@@ -71,20 +71,17 @@ namespace Pixim {
 			dataB && dataB.emit && dataB.emit('PostSolve', dataA);
 		}
 		
-		/**
-		 * @see https://tawaship.github.io/Pixim.js/classes/pixim.container.html
-		 */
-		export class World extends _Pixim.Container {
-			private _box2dData: IWorldData;
+		export class WorldContainer extends ContainerBase {
+			private _box2dData: IWorldContainerData;
 			
-			constructor(options: IWorldOption = {}) {
+			constructor(options: IWorldContainerOption = {}) {
 				super();
 				
 				const gravityX = typeof(options.gravityX) === 'number' ? options.gravityX : 0;
 				const gravityY = typeof(options.gravityY) === 'number' ? options.gravityY : 9.8;
 				const allowSleep = !!options.allowSleep;
 				
-				const world = new _World(new Vec2(gravityX, gravityY), allowSleep);
+				const world = new World(new Vec2(gravityX, gravityY), allowSleep);
 				
 				this._box2dData = {
 					world,
@@ -175,7 +172,7 @@ namespace Pixim {
 				this._box2dData.enabled = flag;
 			}
 			
-			get world() {
+			get world(): World {
 				return this._box2dData.world;
 			}
 			
@@ -226,4 +223,14 @@ namespace Pixim {
 /**
  * @ignore
  */
-export import World = Pixim.box2d.World;
+export import WorldContainer = Pixim.box2d.WorldContainer;
+
+/**
+ * @ignore
+ */
+export import IWorldContainerData = Pixim.box2d.IWorldContainerData;
+
+/**
+ * @ignore
+ */
+export import IWorldContainerOption = Pixim.box2d.IWorldContainerOption;

@@ -1,4 +1,5 @@
 import { Ticker } from 'pixi.js';
+import { Container as PiximContainer } from '@tawaship/pixim.js';
 
 namespace Pixim {
 	export namespace box2d {
@@ -9,7 +10,7 @@ namespace Pixim {
 			 * @see http://pixijs.download/v5.3.2/docs/PIXI.Ticker_.html
 			 */
 			ticker?: Ticker
-		};
+		}
 	}
 }
 

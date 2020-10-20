@@ -1,7 +1,7 @@
-import * as _PIXI from 'pixi.js';
-import * as _Pixim from '@tawaship/pixim.js';
+import { DisplayObject, Container, ObservablePoint } from 'pixi.js';
 import { BodyDef, FixtureDef, Body } from './Box2dAlias';
 import { Box2dToPixi, PixiToBox2d } from './Conf';
+import { ContainerBase } from './ContainerBase';
 import { events } from './events';
 
 namespace Pixim {
@@ -10,6 +10,7 @@ namespace Pixim {
 			density?: number,
 			friction?: number,
 			restitution?: number,
+			isStatic?: boolean
 			
 			/**
 			 * The logical sum of the bits representing the collision detection category to which it belongs.
@@ -36,7 +37,8 @@ namespace Pixim {
 			id: number,
 			body: TBox2dObjectBody,
 			bodyDef: BodyDef,
-			fixtureDefs: FixtureDef[]
+			fixtureDefs: FixtureDef[],
+			pixi?: Container
 		};
 		
 		/**
@@ -62,7 +64,7 @@ namespace Pixim {
 		/**
 		 * @ignore
 		 */
-		function createFixtureDef(options: IBox2dObjectOption = {}, pixi: _PIXI.Container) {
+		function createFixtureDef(options: IBox2dObjectOption = {}, pixi: Container) {
 			const fixtureDef = new FixtureDef();
 			
 			fixtureDef.density = typeof(options.density) === 'number' ? options.density : fixtureDef.density;
@@ -80,10 +82,10 @@ namespace Pixim {
 		 * @ignore
 		 */
 		const descriptors = {
-			positionX: Object.getOwnPropertyDescriptor(_PIXI.ObservablePoint.prototype, 'x'),
-			positionY: Object.getOwnPropertyDescriptor(_PIXI.ObservablePoint.prototype, 'y'),
-			positionSet: _PIXI.ObservablePoint.prototype.set,
-			rotation: Object.getOwnPropertyDescriptor(_PIXI.DisplayObject.prototype, 'rotation')
+			positionX: Object.getOwnPropertyDescriptor(ObservablePoint.prototype, 'x'),
+			positionY: Object.getOwnPropertyDescriptor(ObservablePoint.prototype, 'y'),
+			positionSet: ObservablePoint.prototype.set,
+			rotation: Object.getOwnPropertyDescriptor(DisplayObject.prototype, 'rotation')
 		};
 		
 		export type TContactDelegate = (opponent: Box2dObject) => void;
@@ -95,21 +97,19 @@ namespace Pixim {
 			on(event: typeof events.PostSolve, listener: TContactDelegate): void;
 		}
 		
-		/**
-		 * @see http://pixijs.download/release/docs/PIXI.Container.html
-		 */
-		export class Box2dObject extends _PIXI.Container implements IBox2dObjectContact {
+		export class Box2dObject extends ContainerBase implements IBox2dObjectContact {
 			protected _box2dData: IBox2dObjectData;
 			private static _id: number = 0;
 			
-			constructor(isStatic: boolean = false, options: IBox2dObjectOption = {}) {
+			constructor(options: IBox2dObjectOption = {}) {
 				super();
 				
 				this._box2dData = {
 					id: Box2dObject._id++,
 					body: null,
-					bodyDef: isStatic ? staticBodyDef : dynamicBodyDef,
-					fixtureDefs: [createFixtureDef(options, this)]
+					bodyDef: options.isStatic ? staticBodyDef : dynamicBodyDef,
+					fixtureDefs: [createFixtureDef(options, this)],
+					pixi: null
 				};
 			}
 			
@@ -125,7 +125,7 @@ namespace Pixim {
 				return this._box2dData.id;
 			}
 			
-			get body() {
+			get body(): TBox2dObjectBody {
 				return this._box2dData.body;
 			}
 			
@@ -241,6 +241,22 @@ namespace Pixim {
 					list = list.GetNext();
 				}
 			}
+			
+			toDynamic() {
+				if (!this._box2dData.body) {
+					return;
+				}
+				
+				this._box2dData.body.SetType(Body.b2_dynamicBody);
+			}
+			
+			toStatic() {
+				if (!this._box2dData.body) {
+					return;
+				}
+				
+				this._box2dData.body.SetType(Body.b2_staticBody);
+			}
 		}
 	}
 }
@@ -259,3 +275,8 @@ export import IBox2dObjectOption = Pixim.box2d.IBox2dObjectOption;
  * @ignore
  */
 export import IBox2dObjectData = Pixim.box2d.IBox2dObjectData;
+
+/**
+ * @ignore
+ */
+export import TContactDelegate = Pixim.box2d.TContactDelegate;

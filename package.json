@@ -1,5 +1,5 @@
 {
-  "name": "Pixim-box2d",
+  "name": "pixi-box2d",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -18,14 +18,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tawaship/Pixim-box2d.git"
+    "url": "git+https://github.com/tawaship/pixi-box2d.git"
   },
   "author": "tawaship",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tawaship/Pixim-box2d/issues"
+    "url": "https://github.com/tawaship/pixi-box2d/issues"
   },
-  "homepage": "https://tawaship.github.io/Pixim-box2d/",
+  "homepage": "https://tawaship.github.io/pixi-box2d/",
   "devDependencies": {
     "@rollup/plugin-buble": "^0.21.3",
     "@rollup/plugin-commonjs": "^15.1.0",

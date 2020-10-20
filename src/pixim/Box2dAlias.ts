@@ -49,3 +49,8 @@ export import CircleShape = Collision.Shapes.b2CircleShape;
  * @ignore
  */
 export import PolygonShape = Collision.Shapes.b2PolygonShape;
+
+/**
+ * @ignore
+ */
+export import EdgeShape = Collision.Shapes.b2EdgeShape;
