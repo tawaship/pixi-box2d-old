@@ -1,0 +1,16 @@
+{
+  "include": ["src/**/*.ts"],
+  "compilerOptions": {
+    "target": "ES6"
+  },
+  "typedocOptions": {
+    "mode": "file",
+    "readme": "README.md",
+    "name": "pixi-box2d",
+    "out": "docs/",
+    "moduleResolution": "node",
+    "gitRevision": "master",
+    "includeVersion": true
+  },
+  "exclude": []
+}
