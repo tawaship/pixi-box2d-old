@@ -32,7 +32,8 @@
 					
 					const a = world.addBox2d(PIXI.box2d.Circle.from(new PIXI.Graphics().beginFill(0xFF0000).drawCircle(100, 0, 20), {
 						density: 0.1,
-						restitution: 0.1
+						restitution: 0.1,
+						categoryBits: 2
 					}));
 					a.x = 120;
 					
@@ -75,10 +76,11 @@
 					//const v = new Box2D.Collision.Shapes.b2EdgeShape({x:0,y:0},{x:30,y:40})
 					//console.log(v.GetCoreVertex2())
 					//return
-					const dead = world.addBox2d(new PIXI.box2d.Edge({ x: 450 + 2000, y: 0 }, { isStatic: true, isSensor: true }));
+					const dead = world.addBox2d(new PIXI.box2d.Edge({ x: 450 + 2000, y: 0 }, { isStatic: true, isSensor: true, maskBits: 1 }));
 					dead.x = -1000;
 					dead.y = 800 - 10;
 					dead.on('EndContact', opponent => {
+						console.log(opponent)
 						world.removeBox2d(opponent);
 						console.log("gameover");
 					});
