@@ -124,6 +124,13 @@ namespace PIXI {
 				this.box2dEnabled = true
 			}
 			
+			/**
+			 * @fire Box2dObject#BeginContact
+			 * @fire Box2dObject#EndContact
+			 * @fire Box2dObject#PreSolve
+			 * @fire Box2dObject#PostSolve
+			 * @see https://tawaship.github.io/pixi-box2d/docs/interfaces/pixi.box2d.ibox2dobjectcontact.html
+			 */
 			private _handleTick(delta: number) {
 				if (!this._box2dData.enabled) {
 					return;

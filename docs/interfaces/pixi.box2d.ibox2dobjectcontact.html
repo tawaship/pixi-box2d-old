@@ -109,22 +109,27 @@
 					<a name="on" class="tsd-anchor"></a>
 					<h3>on</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><a href="../modules/pixi.box2d.events.html#begincontact" class="tsd-signature-type">BeginContact</a>, listener<span class="tsd-signature-symbol">: </span><a href="../modules/pixi.box2d.html#tcontactdelegate" class="tsd-signature-type">TContactDelegate</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><a href="../modules/pixi.box2d.events.html#endcontact" class="tsd-signature-type">EndContact</a>, listener<span class="tsd-signature-symbol">: </span><a href="../modules/pixi.box2d.html#tcontactdelegate" class="tsd-signature-type">TContactDelegate</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><a href="../modules/pixi.box2d.events.html#presolve" class="tsd-signature-type">PreSolve</a>, listener<span class="tsd-signature-symbol">: </span><a href="../modules/pixi.box2d.html#tcontactdelegate" class="tsd-signature-type">TContactDelegate</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><a href="../modules/pixi.box2d.events.html#postsolve" class="tsd-signature-type">PostSolve</a>, listener<span class="tsd-signature-symbol">: </span><a href="../modules/pixi.box2d.html#tcontactdelegate" class="tsd-signature-type">TContactDelegate</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"BeginContact"</span>, listener<span class="tsd-signature-symbol">: </span><a href="../modules/pixi.box2d.html#tcontactdelegate" class="tsd-signature-type">TContactDelegate</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"EndContact"</span>, listener<span class="tsd-signature-symbol">: </span><a href="../modules/pixi.box2d.html#tcontactdelegate" class="tsd-signature-type">TContactDelegate</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"PreSolve"</span>, listener<span class="tsd-signature-symbol">: </span><a href="../modules/pixi.box2d.html#tcontactdelegate" class="tsd-signature-type">TContactDelegate</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"PostSolve"</span>, listener<span class="tsd-signature-symbol">: </span><a href="../modules/pixi.box2d.html#tcontactdelegate" class="tsd-signature-type">TContactDelegate</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/Box2dObject.ts:94</li>
+									<li>Defined in <a href="https://github.com/tawaship/pixi-box2d/blob/master/src/Box2dObject.ts#L96">src/Box2dObject.ts:96</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>When objects come into contact with each other.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>event: <span class="tsd-signature-symbol">typeof </span><a href="../modules/pixi.box2d.events.html#begincontact" class="tsd-signature-type">BeginContact</a></h5>
+									<h5>event: <span class="tsd-signature-type">"BeginContact"</span></h5>
 								</li>
 								<li>
 									<h5>listener: <a href="../modules/pixi.box2d.html#tcontactdelegate" class="tsd-signature-type">TContactDelegate</a></h5>
@@ -135,13 +140,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/Box2dObject.ts:95</li>
+									<li>Defined in <a href="https://github.com/tawaship/pixi-box2d/blob/master/src/Box2dObject.ts#L101">src/Box2dObject.ts:101</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>When objects are separated from each other.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>event: <span class="tsd-signature-symbol">typeof </span><a href="../modules/pixi.box2d.events.html#endcontact" class="tsd-signature-type">EndContact</a></h5>
+									<h5>event: <span class="tsd-signature-type">"EndContact"</span></h5>
 								</li>
 								<li>
 									<h5>listener: <a href="../modules/pixi.box2d.html#tcontactdelegate" class="tsd-signature-type">TContactDelegate</a></h5>
@@ -152,13 +162,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/Box2dObject.ts:96</li>
+									<li>Defined in <a href="https://github.com/tawaship/pixi-box2d/blob/master/src/Box2dObject.ts#L107">src/Box2dObject.ts:107</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Immediately before performing contact processing between objects.<br />
+									It will not fire if at least one is &quot;isSensor = true&quot;.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>event: <span class="tsd-signature-symbol">typeof </span><a href="../modules/pixi.box2d.events.html#presolve" class="tsd-signature-type">PreSolve</a></h5>
+									<h5>event: <span class="tsd-signature-type">"PreSolve"</span></h5>
 								</li>
 								<li>
 									<h5>listener: <a href="../modules/pixi.box2d.html#tcontactdelegate" class="tsd-signature-type">TContactDelegate</a></h5>
@@ -169,13 +185,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/Box2dObject.ts:97</li>
+									<li>Defined in <a href="https://github.com/tawaship/pixi-box2d/blob/master/src/Box2dObject.ts#L113">src/Box2dObject.ts:113</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Immediately after performing contact processing between objects.<br />
+									It will not fire if at least one is &quot;isSensor = true&quot;.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>event: <span class="tsd-signature-symbol">typeof </span><a href="../modules/pixi.box2d.events.html#postsolve" class="tsd-signature-type">PostSolve</a></h5>
+									<h5>event: <span class="tsd-signature-type">"PostSolve"</span></h5>
 								</li>
 								<li>
 									<h5>listener: <a href="../modules/pixi.box2d.html#tcontactdelegate" class="tsd-signature-type">TContactDelegate</a></h5>
@@ -198,9 +220,6 @@
 					</li>
 					<li class="current tsd-kind-namespace tsd-parent-kind-namespace">
 						<a href="../modules/pixi.box2d.html">PIXI.box2d</a>
-					</li>
-					<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
-						<a href="../modules/pixi.box2d.events.html">PIXI.box2d.events</a>
 					</li>
 				</ul>
 			</nav>

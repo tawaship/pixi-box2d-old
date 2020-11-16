@@ -338,18 +338,9 @@ this.PIXI = this.PIXI || {}, function(exports, box2dweb, pixi_js) {
             };
         }(PIXI.box2d || (PIXI.box2d = {}));
     }(PIXI$7 || (PIXI$7 = {}));
-    var PIXI$8, init = PIXI$7.box2d.init, addDebugDraw = PIXI$7.box2d.addDebugDraw;
-    !function(PIXI) {
-        !function(box2d) {
-            !function(events) {
-                events.BeginContact = "BeginContact", events.EndContact = "EndContact", events.PreSolve = "PreSolve", 
-                events.PostSolve = "PostSolve";
-            }(box2d.events || (box2d.events = {}));
-        }(PIXI.box2d || (PIXI.box2d = {}));
-    }(PIXI$8 || (PIXI$8 = {}));
-    var events = PIXI$8.box2d.events;
+    var init = PIXI$7.box2d.init, addDebugDraw = PIXI$7.box2d.addDebugDraw;
     exports.Box2dObject = Box2dObject, exports.Circle = Circle, exports.Edge = Edge, 
     exports.Polygon = Polygon, exports.Rectangle = Rectangle, exports.WorldContainer = WorldContainer, 
-    exports.addDebugDraw = addDebugDraw, exports.events = events, exports.init = init;
+    exports.addDebugDraw = addDebugDraw, exports.init = init;
 }(this.PIXI.box2d = this.PIXI.box2d || {}, Box2D, PIXI);
 //# sourceMappingURL=pixi-box2d.js.map

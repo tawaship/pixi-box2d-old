@@ -5,4 +5,3 @@ export * from './Rectangle';
 export * from './Polygon';
 export * from './Edge';
 export * from './core';
-export * from './events';

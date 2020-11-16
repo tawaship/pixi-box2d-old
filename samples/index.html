@@ -78,7 +78,7 @@
 					const dead = world.addBox2d(new PIXI.box2d.Edge({ x: 450 + 2000, y: 0 }, { isStatic: true, isSensor: true }));
 					dead.x = -1000;
 					dead.y = 800 - 10;
-					dead.on(PIXI.box2d.events.EndContact, opponent => {
+					dead.on('EndContact', opponent => {
 						world.removeBox2d(opponent);
 						console.log("gameover");
 					});

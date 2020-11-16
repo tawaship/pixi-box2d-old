@@ -2,7 +2,6 @@ import { DisplayObject, Container, ObservablePoint } from 'pixi.js';
 import { BodyDef, FixtureDef, Body } from './Box2dAlias';
 import { Box2dToPixi, PixiToBox2d } from './Conf';
 import { ContainerBase } from './ContainerBase';
-import { events } from './events';
 
 namespace PIXI {
 	export namespace box2d {
@@ -91,10 +90,27 @@ namespace PIXI {
 		export type TContactDelegate = (opponent: Box2dObject) => void;
 		
 		export interface IBox2dObjectContact {
-			on(event: typeof events.BeginContact, listener: TContactDelegate): this;
-			on(event: typeof events.EndContact, listener: TContactDelegate): void;
-			on(event: typeof events.PreSolve, listener: TContactDelegate): void;
-			on(event: typeof events.PostSolve, listener: TContactDelegate): void;
+			/**
+			 * When objects come into contact with each other.
+			 */
+			on(event: 'BeginContact', listener: TContactDelegate): this;
+			
+			/**
+			 * When objects are separated from each other.
+			 */
+			on(event: 'EndContact', listener: TContactDelegate): void;
+			
+			/**
+			 * Immediately before performing contact processing between objects.<br />
+			 * It will not fire if at least one is "isSensor = true".
+			 */
+			on(event: 'PreSolve', listener: TContactDelegate): void;
+			
+			/**
+			 * Immediately after performing contact processing between objects.<br />
+			 * It will not fire if at least one is "isSensor = true".
+			 */
+			on(event: 'PostSolve', listener: TContactDelegate): void;
 		}
 		
 		export class Box2dObject extends ContainerBase implements IBox2dObjectContact {
