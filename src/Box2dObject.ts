@@ -96,18 +96,14 @@ namespace PIXI {
 			 * @event
 			 * @param opponent The object to collide with.
 			 */
-			BeginContact(opponent: Box2dObject) {
-				this.emit('BeginContact', opponent);
-			}
+			BeginContact(opponent: Box2dObject) {}
 			
 			/**
 			 * When objects are separated from each other.
 			 * @event
 			 * @param opponent The object to collide with.
 			 */
-			EndContact(opponent: Box2dObject) {
-				this.emit('EndContact', opponent);
-			}
+			EndContact(opponent: Box2dObject) {}
 			
 			/**
 			 * Immediately before performing contact processing between objects.<br />
@@ -115,9 +111,7 @@ namespace PIXI {
 			 * @event
 			 * @param opponent The object to collide with.
 			 */
-			PreSolve(opponent: Box2dObject) {
-				this.emit('PreSolve', opponent);
-			}
+			PreSolve(opponent: Box2dObject) {}
 			
 			/**
 			 * Immediately after performing contact processing between objects.<br />
@@ -125,9 +119,7 @@ namespace PIXI {
 			 * @event
 			 * @param opponent The object to collide with.
 			 */
-			PostSolve(opponent: Box2dObject) {
-				this.emit('PostSolve', opponent);
-			}
+			PostSolve(opponent: Box2dObject) {}
 			
 			constructor(options: IBox2dObjectOption = {}) {
 				super();
@@ -286,6 +278,11 @@ namespace PIXI {
 				this._box2dData.body.SetType(Body.b2_staticBody);
 			}
 		}
+		
+		delete(Box2dObject.prototype.BeginContact);
+		delete(Box2dObject.prototype.EndContact);
+		delete(Box2dObject.prototype.PreSolve);
+		delete(Box2dObject.prototype.PostSolve);
 	}
 }
 
