@@ -80,7 +80,6 @@
 					dead.x = -1000;
 					dead.y = 800 - 10;
 					dead.on('EndContact', opponent => {
-						console.log(opponent)
 						world.removeBox2d(opponent);
 						console.log("gameover");
 					});

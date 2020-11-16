@@ -177,7 +177,15 @@ this.PIXI = this.PIXI || {}, function(exports, box2dweb, pixi_js) {
                         configurable: !0
                     }
                 };
-                return Box2dObject.prototype.getBodyDef = function() {
+                return Box2dObject.prototype.BeginContact = function(opponent) {
+                    this.emit("BeginContact", opponent);
+                }, Box2dObject.prototype.EndContact = function(opponent) {
+                    this.emit("EndContact", opponent);
+                }, Box2dObject.prototype.PreSolve = function(opponent) {
+                    this.emit("PreSolve", opponent);
+                }, Box2dObject.prototype.PostSolve = function(opponent) {
+                    this.emit("PostSolve", opponent);
+                }, Box2dObject.prototype.getBodyDef = function() {
                     return this._box2dData.bodyDef;
                 }, Box2dObject.prototype.getFixtureDefs = function() {
                     return this._box2dData.fixtureDefs;

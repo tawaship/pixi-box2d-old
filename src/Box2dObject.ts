@@ -87,35 +87,47 @@ namespace PIXI {
 			rotation: Object.getOwnPropertyDescriptor(DisplayObject.prototype, 'rotation')
 		};
 		
-		export type TContactDelegate = (opponent: Box2dObject) => void;
-		
-		export interface IBox2dObjectContact {
+		export class Box2dObject extends ContainerBase {
+			protected _box2dData: IBox2dObjectData;
+			private static _id: number = 0;
+			
 			/**
 			 * When objects come into contact with each other.
+			 * @event
+			 * @param opponent The object to collide with.
 			 */
-			on(event: 'BeginContact', listener: TContactDelegate): this;
+			BeginContact(opponent: Box2dObject) {
+				this.emit('BeginContact', opponent);
+			}
 			
 			/**
 			 * When objects are separated from each other.
+			 * @event
+			 * @param opponent The object to collide with.
 			 */
-			on(event: 'EndContact', listener: TContactDelegate): void;
+			EndContact(opponent: Box2dObject) {
+				this.emit('EndContact', opponent);
+			}
 			
 			/**
 			 * Immediately before performing contact processing between objects.<br />
 			 * It will not fire if at least one is "isSensor = true".
+			 * @event
+			 * @param opponent The object to collide with.
 			 */
-			on(event: 'PreSolve', listener: TContactDelegate): void;
+			PreSolve(opponent: Box2dObject) {
+				this.emit('PreSolve', opponent);
+			}
 			
 			/**
 			 * Immediately after performing contact processing between objects.<br />
 			 * It will not fire if at least one is "isSensor = true".
+			 * @event
+			 * @param opponent The object to collide with.
 			 */
-			on(event: 'PostSolve', listener: TContactDelegate): void;
-		}
-		
-		export class Box2dObject extends ContainerBase implements IBox2dObjectContact {
-			protected _box2dData: IBox2dObjectData;
-			private static _id: number = 0;
+			PostSolve(opponent: Box2dObject) {
+				this.emit('PostSolve', opponent);
+			}
 			
 			constructor(options: IBox2dObjectOption = {}) {
 				super();
@@ -291,8 +303,3 @@ export import IBox2dObjectOption = PIXI.box2d.IBox2dObjectOption;
  * @ignore
  */
 export import IBox2dObjectData = PIXI.box2d.IBox2dObjectData;
-
-/**
- * @ignore
- */
-export import TContactDelegate = PIXI.box2d.TContactDelegate;
